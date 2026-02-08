@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Service {
+  id            String   @id
+  type          String
+  title         String
+  short         String
+  active        Boolean  @default(true)
+  priceFromUsd  Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookings      Booking[]
+}
+
+model Booking {
+  id             String   @id @default(uuid())
+  serviceId      String
+
+  startDate      DateTime
+  endDate        DateTime
+
+  startLocal   String?
+  endLocal     String?
+  timeZone     String?
+
+
+  customerName   String
+  customerEmail  String
+  customerPhone  String
+
+  createdAt      DateTime @default(now())
+
+  service        Service  @relation(fields: [serviceId], references: [id])
+
+  @@index([serviceId])
+  @@index([startDate, endDate])
+  @@index([customerEmail])
+}
+

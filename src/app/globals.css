@@ -1,8 +1,18 @@
 @import "tailwindcss";
+@import "react-day-picker/dist/style.css";
+
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #f7efe4;
+  --card: #ffffff;
+  --muted: #475569;
+  --sand: #f7efe4;
+  --clay: #c9724a;
+  --sunset: #f2a766;
+  --canyon: #7a3e2f;
+  --night: #1b2333;
 }
 
 @theme inline {
@@ -20,7 +30,102 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #050505;
+  color: #f2e6d8;
+  font-family: var(--font-geist-sans);
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body,
+#__next {
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(15, 23, 42, 0.12);
+}
+
+.rdp {
+  --rdp-cell-size: 42px;
+  --rdp-accent-color: #1b2333;
+  --rdp-background-color: #1b2333;
+  --rdp-accent-color-dark: #1b2333;
+  --rdp-background-color-dark: #1b2333;
+  margin: 0;
+  width: 100%;
+}
+
+.rdp-months {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rdp-caption_label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1b2333;
+}
+
+.rdp-head_cell {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #64748b;
+}
+
+.rdp-day {
+  border-radius: 999px;
+}
+
+.rdp-day_selected,
+.rdp-day_selected:focus-visible,
+.rdp-day_selected:hover {
+  color: white;
+  background: #1b2333;
+  border-radius: 999px;
+}
+
+.rdp-day_range_start,
+.rdp-day_range_end {
+  color: white;
+  background: #1b2333;
+  border-radius: 999px;
+}
+
+.rdp-day_range_middle {
+  background: rgba(27, 35, 51, 0.12);
+  color: #1b2333;
+  border-radius: 999px;
+}
+
+.rdp-day_today {
+  border: 1px solid rgba(27, 35, 51, 0.5);
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background: rgba(27, 35, 51, 0.08);
+  border-radius: 999px;
 }
