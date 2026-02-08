@@ -25,6 +25,7 @@ export async function GET(req: Request) {
   });
 
   // Отдаём даты в формате YYYY-MM-DD (удобно для UI)
+  // тестовый комментарий
   const mapped = bookings.map((b) => ({
     ...b,
     startDate: b.startDate.toISOString().slice(0, 10),
