@@ -5,6 +5,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { bodyFont, displayFont } from "@/lib/fonts";
 import { services } from "@/lib/services";
 import type { ServiceType } from "@/lib/services";
+import { isFlagEnabled } from "@/lib/featureFlags";
 
 const accent = "#ff8a3d";
 const noiseSvg =
@@ -18,7 +19,9 @@ const serviceImages: Record<ServiceType, string> = {
 };
 
 export default function BookPage() {
-  const active = services.filter((s) => s.active);
+  const active = services.filter(
+    (s) => s.active && isFlagEnabled(s.featureFlagKey)
+  );
 
   return (
     <main className={`${bodyFont.className} min-h-screen bg-[#0f0e0e] text-[#f2e6d8]`}>
@@ -68,8 +71,7 @@ export default function BookPage() {
               Choose your ride.
             </h1>
             <p className="mt-5 max-w-2xl text-base text-white/80 md:text-lg">
-              One premium Jeep available now. Additional experiences unlock by
-              request. Tap a service to see dates.
+              One premium Jeep available now. Tap a service to see dates.
             </p>
           </div>
         </div>
@@ -80,39 +82,52 @@ export default function BookPage() {
         className="flex min-h-screen items-center justify-center bg-[linear-gradient(to_bottom,#0f0e0e_0%,#4d1a12_40%,#8c2f21_100%)] px-6 py-16"
       >
         <div className="w-full max-w-5xl">
-          <div className="grid gap-6 text-left md:grid-cols-2">
-            {active.map((s) => (
-              <a
-                key={s.id}
-                href={`/book/${s.id}`}
-                className="rounded-3xl border border-white/15 bg-white/5 px-6 py-6 backdrop-blur-sm transition hover:-translate-y-1"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="h-20 w-28 overflow-hidden rounded-2xl border border-white/15">
-                    <Image
-                      src={serviceImages[s.type]}
-                      alt={s.title}
-                      width={420}
-                      height={300}
-                      className="h-full w-full object-cover"
-                    />
+          {active.length === 0 ? (
+            <div className="rounded-3xl border border-white/15 bg-white/5 px-8 py-10 text-center text-white/80">
+              <p className={`${displayFont.className} text-2xl font-semibold`}>
+                No services available
+              </p>
+              <p className="mt-3 text-sm text-white/70">
+                Please check back soon.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 text-left md:grid-cols-2">
+              {active.map((s) => (
+                <a
+                  key={s.id}
+                  href={`/book/${s.id}`}
+                  className="rounded-3xl border border-white/15 bg-white/5 px-6 py-6 backdrop-blur-sm transition hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-20 w-28 overflow-hidden rounded-2xl border border-white/15">
+                      <Image
+                        src={serviceImages[s.type]}
+                        alt={s.title}
+                        width={420}
+                        height={300}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
+                        Available now
+                      </p>
+                      <h2
+                        className={`${displayFont.className} mt-2 text-2xl font-semibold text-white`}
+                      >
+                        {s.title}
+                      </h2>
+                      <p className="mt-2 text-sm text-white/70">{s.short}</p>
+                      <p className="mt-3 text-sm font-semibold text-white">
+                        from ${s.priceFromUsd}/day
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
-                      Available now
-                    </p>
-                    <h2 className={`${displayFont.className} mt-2 text-2xl font-semibold text-white`}>
-                      {s.title}
-                    </h2>
-                    <p className="mt-2 text-sm text-white/70">{s.short}</p>
-                    <p className="mt-3 text-sm font-semibold text-white">
-                      from ${s.priceFromUsd}/day
-                    </p>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

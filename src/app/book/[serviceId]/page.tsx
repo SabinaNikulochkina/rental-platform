@@ -10,6 +10,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { bodyFont, displayFont } from "@/lib/fonts";
 import { services } from "@/lib/services";
 import type { ServiceType } from "@/lib/services";
+import { isFlagEnabled } from "@/lib/featureFlags";
 
 const serviceImages: Record<ServiceType, string> = {
   VEHICLE: "/media/jeep-1.png",
@@ -224,7 +225,10 @@ export default function ServiceBookPage() {
     await load();
   }
 
-  if (!service || !service.active) {
+  const isVisible =
+    service && service.active && isFlagEnabled(service.featureFlagKey);
+
+  if (!service || !isVisible) {
     return (
       <main
         className={`${bodyFont.className} flex min-h-screen items-center justify-center bg-[#f7efe4] text-[#231a15]`}
